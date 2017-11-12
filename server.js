@@ -13,13 +13,16 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
-connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-  if (error) throw error;
-  console.log('The solution is: ', results[0].solution);
-});
-
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/get', (req, res) => {
+  connection.query('SELECT * from test', function (error, results, fields) {
+    if (error) throw error;
+    console.log('The solution is: ', results);
+    res.send(JSON.stringify(results));
+  });
 });
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
