@@ -2,7 +2,7 @@ import express from 'express';
 import google from 'googleapis';
 import mysql from 'mysql';
 
-import { SERVER, NAME, USERNAME, PASSWORD, PORT, DATABASE } from './logins';
+import { SERVER, NAME, USERNAME, PASSWORD, PORT, DATABASE } from './src/logins';
 
 const app = express();
 const connection = mysql.createConnection({
@@ -22,6 +22,7 @@ app.get('/get', (req, res) => {
     if (error) throw error;
     console.log('The solution is: ', results);
     res.send(JSON.stringify(results));
+    // res.json(result);
   });
 });
 
