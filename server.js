@@ -2,9 +2,10 @@ import express from 'express';
 import google from 'googleapis';
 import mysql from 'mysql';
 
-import { SERVER, NAME, USERNAME, PASSWORD, PORT, DATABASE } from './src/logins';
+import { SERVER, DATABASE_NAME, USERNAME, PASSWORD, PORT, DATABASE } from './src/logins';
 
 const app = express();
+// for MySQL server connection 
 const connection = mysql.createConnection({
   host     : SERVER,
   user     : USERNAME,
@@ -14,16 +15,25 @@ const connection = mysql.createConnection({
 connection.connect();
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.send(__dirname + '/index.html');
 });
 
 app.get('/get', (req, res) => {
-  connection.query('SELECT * from test', function (error, results, fields) {
+  // for MySQL server SELECT 
+  connection.query('SELECT * FROM `221241`', function (error, results, fields) {
     if (error) throw error;
-    console.log('The solution is: ', results);
-    res.send(JSON.stringify(results));
-    // res.json(result);
+    let summ = 0;
+    let comp = 1;
+    results.forEach(elem => {
+      summ += elem.value;
+      comp *= elem.value;
+    });
+    res.send(JSON.stringify({
+      'SELECT * FROM `221241`:': results,
+      'summa:': summ,
+      'composition': comp,
+    }));
   });
 });
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'));
+app.listen(3000, () => console.log('App listening on port 3000!'));
